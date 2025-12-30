@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "lingomem": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp",
+        "g:/Project/Python/LingoMem/lingomem.py"
+      ],
+      "env": {
+        "LINGOMEM_DB_PATH": "g:/Project/Python/LingoMem/vocab.db"
+      }
+    }
+  }
+}
