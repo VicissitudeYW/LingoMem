@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LingoMem - 单词背诵系统</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Language-specific styles -->
+  <link rel="stylesheet" href="css/english.css">
+  <link rel="stylesheet" href="css/german.css">
+  <link rel="stylesheet" href="css/japanese.css">
+  <link rel="stylesheet" href="css/french.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部导航 -->
+    <nav class="navbar">
+      <div class="nav-content">
+        <div class="nav-brand" id="navBrandHome" style="cursor: pointer;" title="LingoMem">
+          <span class="brand-icon">📚</span>
+          <span class="brand-text">LingoMem</span>
+        </div>
+        
+        <div class="nav-menu">
+          <a href="#create" class="nav-link" data-route="create">
+            <i class="bi bi-plus-circle"></i>
+            <span>生成卡片</span>
+          </a>
+          <a href="#cards" class="nav-link active" data-route="cards">
+            <i class="bi bi-card-text"></i>
+            <span>学习卡片</span>
+          </a>
+          <a href="#progress" class="nav-link" data-route="progress">
+            <i class="bi bi-graph-up"></i>
+            <span>学习进度</span>
+          </a>
+        </div>
+        
+        <div class="nav-controls">
+          <button class="theme-toggle" id="themeToggle" title="切换主题">
+            <i class="bi bi-moon-stars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 主要内容区 -->
+    <main class="main-content">
+      <div class="container">
+        
+        <!-- 创建卡片区域 -->
+        <section id="createSection" class="section">
+          <div class="section-header">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <div>
+                <h2>创建学习卡片</h2>
+                <p class="section-desc">描述你想学习的单词类型，AI 将为你生成卡片预览</p>
+              </div>
+              <div class="language-selector">
+                <label for="languageSelect" style="font-size: 0.9rem; color: var(--text-secondary); margin-right: 0.5rem;">学习语言:</label>
+                <select id="languageSelect" class="language-select">
+                  <option value="english">English</option>
+                  <option value="german">Deutsch</option>
+                  <option value="french">Français</option>
+                  <option value="japanese">日本語</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="create-card">
+            <div class="input-group">
+              <textarea
+                id="customPrompt"
+                class="custom-prompt-input"
+                placeholder="描述你想学习的单词类型，例如：&#10;• 请给我推荐一些 A1 水平的关于美食的法语词&#10;• 我想学习商务英语中常用的动词&#10;• 给我一些德语旅游常用词汇"
+                rows="6"
+              ></textarea>
+            </div>
+            
+            <div class="recommend-section">
+              <div class="slider-container">
+                <label for="recommendCount" class="slider-label">
+                  <span>生成数量</span>
+                  <span id="recommendCountValue" class="slider-value">10</span>
+                </label>
+                <input type="range" id="recommendCount" class="slider" min="5" max="20" value="10" step="1">
+                <div class="slider-marks">
+                  <span>5</span>
+                  <span>10</span>
+                  <span>15</span>
+                  <span>20</span>
+                </div>
+              </div>
+            </div>
+            
+            <button id="generatePreviewBtn" class="btn btn-primary btn-large">
+              <i class="bi bi-magic"></i>
+              <span>生成卡片预览</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 卡片预览区域 -->
+        <section id="previewSection" class="section hidden">
+          <div class="section-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <button id="backFromPreview" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                返回
+              </button>
+              <h2 style="margin: 0;">卡片预览</h2>
+            </div>
+            <div class="preview-info">
+              <span class="info-text">
+                <i class="bi bi-hand-index"></i>
+                左滑保留 / 右滑丢弃
+              </span>
+              <button id="saveSelectedBtn" class="btn btn-primary">
+                <i class="bi bi-check-circle"></i>
+                保存选中的卡片
+              </button>
+            </div>
+          </div>
+
+          <div class="swipe-hints">
+            <div class="swipe-hint swipe-hint-left">
+              <i class="bi bi-folder-plus"></i>
+              <span>保留</span>
+            </div>
+            <div class="swipe-hint swipe-hint-right">
+              <i class="bi bi-trash"></i>
+              <span>丢弃</span>
+            </div>
+          </div>
+
+          <div id="previewCards" class="preview-cards-container">
+            <!-- 预览卡片将动态生成 -->
+          </div>
+        </section>
+
+        <!-- 学习区域 -->
+        <section id="learningSection" class="section hidden">
+          <div class="section-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <button id="backToFolders" class="btn btn-secondary" style="display: none;">
+                <i class="bi bi-arrow-left"></i>
+                返回文件夹
+              </button>
+              <button id="createCardsBtn2" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                生成新卡片
+              </button>
+              <h2 style="margin: 0;" id="learningTitle">学习卡片</h2>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+              <div class="view-toggle">
+                <button class="view-btn active" data-view="folders">
+                  <i class="bi bi-folder"></i>
+                  文件夹
+                </button>
+                <button class="view-btn" data-view="list">
+                  <i class="bi bi-list-ul"></i>
+                  列表
+                </button>
+              </div>
+              <div class="learning-stats">
+                <span class="stat-item">
+                  <i class="bi bi-book"></i>
+                  <span id="learningCount">0</span> 学习中
+                </span>
+                <span class="stat-item">
+                  <i class="bi bi-arrow-repeat"></i>
+                  <span id="reviewingCount">0</span> 复习中
+                </span>
+                <span class="stat-item">
+                  <i class="bi bi-check-circle"></i>
+                  <span id="masteredCount">0</span> 已掌握
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 文件夹视图 -->
+          <div id="foldersView" class="folders-view">
+            <div id="languageFolders" class="language-folders">
+              <!-- 语言文件夹将动态生成 -->
+            </div>
+          </div>
+
+          <!-- 列表视图 -->
+          <div id="listView" class="list-view" style="display: none;">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="learning">
+              <i class="bi bi-book"></i>
+              背诵区
+            </button>
+            <button class="tab-btn" data-tab="reviewing">
+              <i class="bi bi-arrow-repeat"></i>
+              复习区
+            </button>
+          </div>
+
+          <div class="tab-content">
+            <!-- 背诵区 -->
+            <div id="learningTab" class="tab-pane active">
+              <div id="learningCards" class="cards-container">
+                <!-- 卡片将动态生成 -->
+              </div>
+            </div>
+
+            <!-- 复习区 -->
+            <div id="reviewingTab" class="tab-pane">
+              <div id="reviewingCards" class="cards-container">
+                <!-- 卡片将动态生成 -->
+              </div>
+            </div>
+          </div>
+          </div>
+        </section>
+
+
+        <!-- 学习进度页面 -->
+        <section id="progressSection" class="section hidden">
+          <div class="section-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <button id="backFromProgress" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                返回
+              </button>
+              <h2 style="margin: 0;">📊 学习进度</h2>
+            </div>
+          </div>
+
+          <div id="progressContent" class="progress-content">
+            <!-- 进度内容将动态生成 -->
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Toast 通知 -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <!-- 加载状态 (在 body 最后，确保在所有内容之上) -->
+  <div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+    <p id="loadingText" class="loading-text">正在生成卡片...</p>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

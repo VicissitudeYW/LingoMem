@@ -1,0 +1,131 @@
+/* English specific styles */
+
+.lang-english {
+  --primary: #3B82F6;         /* blue-500 */
+  --primary-dark: #1E40AF;    /* blue-800 */
+  --primary-light: #93C5FD;   /* blue-300 */
+  --primary-bg: #EFF6FF;      /* blue-50 */
+}
+
+/* 提升变量作用域优先级 */
+.word-card.lang-english {
+  --primary: #3B82F6;
+  --primary-dark: #1E40AF;
+  --primary-light: #93C5FD;
+  --primary-bg: #EFF6FF;
+}
+
+/* 卡片头部样式 */
+.lang-english .card-header {
+  border-left: 4px solid var(--primary);
+  font-family: 'Times New Roman', serif;
+}
+
+/* 明确覆盖标题背景 */
+.word-card.lang-english .card-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: white !important;
+}
+
+/* 音标区域 */
+.word-card.lang-english .card-phonetics {
+  background: linear-gradient(135deg, var(--primary-bg), var(--primary-bg));
+}
+
+/* 卡片标题 */
+.lang-english .card-title {
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary-light);
+}
+
+.lang-english .card-title::after {
+  background-color: var(--primary);
+}
+
+.lang-english .card-title i {
+  color: var(--primary);
+}
+
+/* 词性徽章 */
+.lang-english .definition-pos {
+  background-color: var(--primary-dark);
+  color: #fff;
+}
+
+/* 定义项边框 */
+.lang-english .definition-item {
+  border-left-color: var(--primary-light);
+}
+
+.lang-english .definition-item:hover {
+  border-left-color: var(--primary);
+}
+
+/* 例句边框 */
+.lang-english .example-item {
+  border-left-color: var(--primary-light);
+}
+
+.lang-english .example-item:hover {
+  border-left-color: var(--primary);
+}
+
+/* 例句原文样式 */
+.lang-english .example-sentence {
+  font-style: italic;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* 嵌入式例句 */
+.lang-english .definition-example {
+  background: var(--primary-bg);
+  border-left-color: var(--primary-light);
+}
+
+/* 词源与提示 */
+.lang-english .card-etymology,
+.lang-english .card-tips {
+  background-color: var(--primary-bg);
+  border-left-color: var(--primary);
+}
+
+/* Dark mode theme variables (English) */
+body.dark-mode .lang-english {
+  --primary: #60A5FA;         /* blue-400 */
+  --primary-dark: #1E3A8A;    /* blue-900 */
+  --primary-light: #93C5FD;   /* blue-300 */
+  --primary-bg: #1E3A8A15;    /* blue with transparency */
+}
+
+body.dark-mode .word-card.lang-english {
+  --primary: #60A5FA;
+  --primary-dark: #1E3A8A;
+  --primary-light: #93C5FD;
+  --primary-bg: #1E3A8A15;
+}
+
+body.dark-mode .word-card.lang-english .card-header {
+  background: linear-gradient(135deg, #2563EB, #1E40AF) !important;
+  color: white !important;
+}
+
+body.dark-mode .lang-english .definition-pos {
+  background-color: #2563EB;
+  color: #fff;
+}
+
+body.dark-mode .lang-english .card-title {
+  color: var(--primary);
+}
+
+body.dark-mode .lang-english .definition-example {
+  background: var(--bg-tertiary);
+  border-left-color: var(--primary);
+}
+
+body.dark-mode .lang-english .card-etymology,
+body.dark-mode .lang-english .card-tips {
+  background-color: var(--bg-tertiary);
+  border-left-color: var(--primary);
+}

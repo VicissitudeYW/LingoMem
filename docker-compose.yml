@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  lingomem:
+    build: .
+    container_name: lingomem-app
+    ports:
+      - "45000:45000"
+    environment:
+      - NODE_ENV=production
+      - AI_API_ENDPOINT=${AI_API_ENDPOINT}
+      - AI_API_KEY=${AI_API_KEY}
+      - AI_MODEL=${AI_MODEL}
+      - AI_TEMPERATURE=${AI_TEMPERATURE}
+      - AI_MAX_TOKENS=${AI_MAX_TOKENS}
+      - PORT=45000
+    volumes:
+      # 挂载 cards 目录以持久化数据
+      - ./cards:/app/cards
+    restart: unless-stopped
+    networks:
+      - lingomem-network
+
+networks:
+  lingomem-network:
+    driver: bridge
