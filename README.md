@@ -1,5 +1,7 @@
 # LingoMem - 智能单词背诵系统
 
+[English](./README_EN.md) | 简体中文
+
 一个基于 AI 的多语言单词学习系统，支持单词卡片生成、智能复习和学习进度追踪。
 
 ## ✨ 特性
@@ -32,7 +34,7 @@
 
 1. **克隆项目**
 ```bash
-git clone https://github.com/yourusername/LingoMem.git
+git clone https://github.com/VicissitudeYW/LingoMem.git
 cd LingoMem
 ```
 
@@ -73,7 +75,7 @@ docker-compose down
 
 1. **克隆项目**
 ```bash
-git clone https://github.com/yourusername/LingoMem.git
+git clone https://github.com/VicissitudeYW/LingoMem.git
 cd LingoMem
 ```
 
@@ -118,7 +120,6 @@ npm start
 - 点击卡片展开查看完整内容
 - 点击"认识"将单词移至复习区
 - 点击"不认识"保持在学习区
-- 支持滑动操作：左滑保存，右滑删除
 
 **复习区**：
 - 显示所有"复习中"状态的单词
@@ -318,7 +319,7 @@ DELETE /api/collections/:id
           ]
         }
       ],
-      "tips": "**记忆技巧**: apple 是最常见的水果单词之一\n\n**用法说明**:\n- 可数名词\n- 常用短语: an apple a day",
+      "tips": "**记忆技巧**: apple 是最常见的水果单词之一",
       "etymology": "来自古英语 æppel",
       "status": "learning"
     }
@@ -332,96 +333,13 @@ DELETE /api/collections/:id
 }
 ```
 
-## 🎯 学习状态
-
-- **learning**: 学习中 - 新单词或需要加强记忆的单词
-- **reviewing**: 复习中 - 已经认识但需要巩固的单词
-- **mastered**: 已掌握 - 完全掌握的单词
-
-## 🌟 特色功能
-
-### 1. 智能卡片生成
-- AI 自动生成完整的单词信息
-- 包含音标、释义、例句、提示等
-- 支持多语言特定内容
-- 可重新生成不满意的卡片
-
-### 2. 文件夹视图
-- 按语言分类管理集合
-- 快速查看每种语言的学习统计
-- 直观的文件夹图标和颜色区分
-- 支持文件夹视图和列表视图切换
-
-### 3. 流畅动画
-- 卡片滑入/滑出动画
-- 状态切换过渡效果
-- 响应式交互反馈
-- 滑动手势支持
-
-### 4. Markdown 支持
-- 学习提示支持富文本格式
-- 粗体、列表、代码块等
-- 自动渲染为 HTML
-
-### 5. 进度追踪
-- 实时统计学习进度
-- 分类显示不同状态的单词
-- 集合级别的统计信息
-- 语言级别的统计汇总
-
-### 6. 双主题设计
-- **浅色模式**: 温暖的米黄色渐变背景（#F9E8D0）
-- **深色模式**: 优雅的深蓝灰色背景（#3C465C）
-- 自动保存用户偏好
-- 平滑过渡动画
-
-## 🔒 安全性
-
-- API 密钥通过环境变量管理
-- 本地文件存储，数据隐私有保障
-- 输入验证和错误处理
-- Docker 容器隔离
-
-## 🐛 故障排除
-
-### 卡片生成失败
-- 检查 `.env` 文件中的 API 配置是否正确
-- 确认 API 密钥有效且有足够的配额
-- 查看服务器日志获取详细错误信息
-
-### Docker 容器无法启动
-- 确保 Docker 和 Docker Compose 已正确安装
-- 检查端口 45000 是否被占用
-- 查看容器日志：`docker-compose logs`
-
-### 卡片无法保存
-- 确保 `cards` 目录有写入权限
-- 检查磁盘空间是否充足
-- 查看服务器日志获取错误信息
-
 ## 📄 许可证
 
 MIT License
 
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-### 贡献指南
-1. Fork 本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
 ## 📮 联系方式
 
 如有问题或建议，请创建 Issue。
-
-## 🙏 致谢
-
-- 感谢 AI 技术让语言学习变得更加智能
-- 感谢所有贡献者的支持
 
 ---
 
