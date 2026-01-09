@@ -195,14 +195,8 @@ class LingoMemApp {
               }, 300);
             }
           }
-        } else {
-          // 点击卡片展开/收起
-          this.cardManager.toggleCardExpand(cardId);
-          const collection = this.collectionManager.getCurrentCollection();
-          if (collection) {
-            this.cardManager.renderCards(collection);
-          }
         }
+        // 注意：卡片展开/折叠功能已在CardManager.createCardElement中通过事件监听器处理
       });
     };
     

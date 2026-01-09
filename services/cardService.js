@@ -57,12 +57,13 @@ class CardService {
               return null;
             }
             
-            // 返回集合摘要信息
+            // 返回集合完整信息
             return {
               id: data.id,
               language: data.language,
               createdAt: data.createdAt,
               totalCards: data.totalCards || data.cards.length,
+              cards: data.cards,
               stats: {
                 learning: data.cards.filter(c => c.status === 'learning').length,
                 reviewing: data.cards.filter(c => c.status === 'reviewing').length,

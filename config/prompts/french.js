@@ -5,48 +5,35 @@
 function frenchCardPrompt(word) {
   return `请为法语单词"${word}"生成一张学习卡片。
 
-重要提示：必须替换所有方括号占位符为实际内容，不要留下任何[占位符]文本。
-
-请严格按照以下JSON格式返回（必须是有效的JSON，不要添加任何注释或额外文本）：
+请严格按照以下JSON格式返回（必须是有效的JSON）：
 
 {
   "word": "${word}",
-  "phonetic": "[替换为实际音标，如：[paʁle]，注意法语特殊发音和连音]",
-  "level": "[替换为实际难度等级：A1/A2/B1/B2/C1/C2]",
+  "phonetic": "[音标]",
+  "level": "[A1/A2/B1/B2/C1/C2]",
   "definitions": [
     {
-      "pos": "[替换为实际词性：n.m./n.f./v./adj./adv./prép.等，名词要标注性别]",
-      "meaning": "[替换为实际中文释义1]",
+      "pos": "[词性，名词要标注性别]",
+      "meaning": "[中文释义]",
       "example": {
-        "sentence": "[替换为该释义对应的实际法语例句]",
-        "translation": "[替换为该例句的实际中文翻译]"
-      }
-    },
-    {
-      "pos": "[替换为实际词性]",
-      "meaning": "[替换为实际中文释义2]",
-      "example": {
-        "sentence": "[替换为该释义对应的实际法语例句]",
-        "translation": "[替换为该例句的实际中文翻译]"
+        "sentence": "[法语例句]",
+        "translation": "[中文翻译]"
       }
     }
   ],
-  "etymology": "[替换为实际词源说明，包括拉丁语词根、词缀、演变过程等]",
-  "tips": "[替换为实际学习提示和记忆技巧，可以包含性别记忆、动词变位组别、发音技巧等]"
+  "conjugation": "[如果是动词，提供HTML表格：动词变位]",
+  "inflection": "[如果是形容词，提供HTML表格：阳性/阴性，单数/复数]",
+  "declension": "[如果是名词，提供HTML表格：单数/复数形式]",
+  "etymology": "[词源说明]",
+  "tips": "[学习提示]"
 }
 
-关键要求：
-1. 必须替换所有方括号占位符为真实内容
-2. 不要在最终输出中留下任何[占位符]文本
-3. 确保JSON格式正确且可解析
-4. definitions 必须至少包含2个不同词性或含义
-5. 每个 definition 必须包含一个对应的 example（例句要体现该释义的用法）
-6. 所有解释和翻译必须使用中文
-7. 只返回JSON对象，不要添加任何其他文本或markdown标记
-8. 不要使用代码块标记（\`\`\`json）
-9. 名词必须标注性别（m./f.）和复数形式
-10. 动词要说明变位组别（第一组/第二组/第三组）
-11. 注意法语特殊字符（é, è, ê, à, ç, œ等）的正确使用`;
+要求：
+1. 动词必须提供conjugation
+2. 形容词必须提供inflection
+3. 名词必须提供declension
+4. definitions至少2个
+5. 只返回JSON`;
 }
 
 function frenchRecommendationPrompt(knownWords, stats, count) {

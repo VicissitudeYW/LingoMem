@@ -1,130 +1,212 @@
 /* German specific styles */
 
 .lang-german {
-  --primary: #F59E0B;         /* amber-500 */
-  --primary-dark: #B45309;    /* amber-700 */
-  --primary-light: #FDE68A;   /* amber-200 */
-  --primary-bg: #FFFBEB;      /* amber-50 */
+  --primary: #F97316;
+  --primary-dark: #C2410C;
+  --primary-light: #FDBA74;
+  --primary-bg: #FFF7ED;
 }
 
-/* 提升变量作用域优先级 */
 .word-card.lang-german {
-  --primary: #F59E0B;
-  --primary-dark: #B45309;
-  --primary-light: #FDE68A;
-  --primary-bg: #FFFBEB;
+  --primary: #F97316;
+  --primary-dark: #C2410C;
+  --primary-light: #FDBA74;
+  --primary-bg: #FFF7ED;
+  background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-bg) 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
 }
 
-/* 卡片头部样式 */
-.lang-german .card-header {
-  border-left: 4px solid var(--primary);
-  font-family: 'Fira Sans', 'Arial', sans-serif;
+.word-card.lang-german::before {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  height: 4px;
 }
 
-/* 明确覆盖标题背景 */
-.word-card.lang-german .card-header {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-  color: white !important;
+.word-card.lang-german .card-header-new {
+  background: linear-gradient(135deg, var(--primary-bg) 0%, #FFFFFF 100%);
+  border-bottom: 2px solid var(--primary-light);
 }
 
-/* 音标区域 */
-.word-card.lang-german .card-phonetics {
-  background: linear-gradient(135deg, var(--primary-bg), var(--primary-bg));
-}
-
-/* 卡片标题 */
-.lang-german .card-title {
+.word-card.lang-german .card-header-new .card-word {
   color: var(--primary-dark);
-  border-bottom-color: var(--primary-light);
+  font-size: 1.85rem;
+  letter-spacing: 1px;
 }
 
-.lang-german .card-title::after {
-  background-color: var(--primary);
+.word-card.lang-german .card-phonetic-new {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+}
+
+.word-card.lang-german .card-phonetics {
+  background: linear-gradient(135deg, var(--primary-bg) 0%, #FFFFFF 100%);
+  padding: 2rem 1.5rem;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.word-card.lang-german .card-phonetic {
+  background: white;
+  border: 2px solid var(--primary-light);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
+  font-size: 1.15rem;
+  padding: 0.85rem 1.5rem;
+}
+
+.word-card.lang-german .card-phonetic:hover {
+  border-color: var(--primary);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.25);
+}
+
+.lang-german .card-title {
+  border-left: 5px solid var(--primary);
+  padding-left: 1rem;
+  color: var(--primary-dark);
+  background: linear-gradient(90deg, var(--primary-bg) 0%, transparent 100%);
+  padding: 0.75rem 1rem;
+  border-radius: 0 8px 8px 0;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .lang-german .card-title i {
   color: var(--primary);
+  font-size: 1.2rem;
 }
 
-/* 词性徽章 */
 .lang-german .definition-pos {
-  background-color: var(--primary-dark);
-  color: #fff;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(249, 115, 22, 0.3);
+  letter-spacing: 0.5px;
 }
 
-/* 定义项边框 */
+.lang-german .pill-pos {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+  font-weight: 600;
+}
+
+.lang-german .pill-level {
+  background: white;
+  color: var(--primary-dark);
+  border: 2px solid var(--primary);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.15);
+}
+
+.lang-german .pill-expand:hover,
+.lang-german .pill-action:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
 .lang-german .definition-item {
-  border-left-color: var(--primary-light);
+  border-left: 5px solid var(--primary-light);
+  background: linear-gradient(90deg, var(--primary-bg) 0%, var(--bg-primary) 100%);
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .lang-german .definition-item:hover {
   border-left-color: var(--primary);
+  transform: translateX(8px);
+  box-shadow: 0 5px 15px rgba(249, 115, 22, 0.2);
 }
 
-/* 例句边框 */
 .lang-german .example-item {
-  border-left-color: var(--primary-light);
+  border-left: 5px solid var(--primary-light);
+  background: linear-gradient(90deg, var(--primary-bg) 0%, var(--bg-primary) 100%);
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .lang-german .example-item:hover {
   border-left-color: var(--primary);
+  transform: translateX(8px);
+  box-shadow: 0 5px 15px rgba(249, 115, 22, 0.2);
 }
 
-/* 德语文本样式 */
 .lang-german .example-sentence {
-  color: var(--text-primary);
-  font-weight: 500;
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
-/* 嵌入式例句 */
 .lang-german .definition-example {
-  background: var(--primary-bg);
-  border-left-color: var(--primary-light);
+  background: linear-gradient(135deg, var(--primary-bg) 0%, white 100%);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.1);
 }
 
-/* 词源与提示 */
 .lang-german .card-etymology,
 .lang-german .card-tips {
-  background-color: var(--primary-bg);
-  border-left-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary-bg) 0%, white 100%);
+  border-left: 5px solid var(--primary);
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 3px 10px rgba(249, 115, 22, 0.1);
 }
 
 /* Dark mode theme variables (German) */
 body.dark-mode .lang-german {
-  --primary: #FBBF24;         /* amber-400 */
-  --primary-dark: #92400E;    /* amber-800 */
-  --primary-light: #FDE68A;   /* amber-200 */
-  --primary-bg: #92400E15;    /* amber with transparency */
+  --primary: #FB923C;
+  --primary-dark: #F97316;
+  --primary-light: #FDBA74;
+  --primary-bg: #4A2C1A;
 }
 
 body.dark-mode .word-card.lang-german {
-  --primary: #FBBF24;
-  --primary-dark: #92400E;
-  --primary-light: #FDE68A;
-  --primary-bg: #92400E15;
+  --primary: #FB923C;
+  --primary-dark: #F97316;
+  --primary-light: #FDBA74;
+  --primary-bg: #4A2C1A;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--primary-bg) 100%);
 }
 
-body.dark-mode .word-card.lang-german .card-header {
-  background: linear-gradient(135deg, #F59E0B, #B45309) !important;
-  color: white !important;
+body.dark-mode .word-card.lang-german .card-header-new {
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--bg-primary) 100%);
+  border-bottom-color: var(--primary-dark);
+}
+
+body.dark-mode .word-card.lang-german .card-phonetic-new {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  box-shadow: 0 2px 8px rgba(251, 146, 60, 0.4);
 }
 
 body.dark-mode .lang-german .definition-pos {
-  background-color: #D97706;
-  color: #fff;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  box-shadow: 0 3px 10px rgba(251, 146, 60, 0.4);
 }
 
 body.dark-mode .lang-german .card-title {
   color: var(--primary);
+  background: linear-gradient(90deg, var(--primary-bg) 0%, transparent 100%);
+}
+
+body.dark-mode .lang-german .definition-item,
+body.dark-mode .lang-german .example-item {
+  background: linear-gradient(90deg, var(--primary-bg) 0%, var(--bg-primary) 100%);
 }
 
 body.dark-mode .lang-german .definition-example {
-  background: var(--bg-tertiary);
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--bg-tertiary) 100%);
   border-left-color: var(--primary);
 }
 
 body.dark-mode .lang-german .card-etymology,
 body.dark-mode .lang-german .card-tips {
-  background-color: var(--bg-tertiary);
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--bg-tertiary) 100%);
   border-left-color: var(--primary);
 }

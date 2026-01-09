@@ -11,42 +11,40 @@ function japaneseCardPrompt(word) {
 
 {
   "word": "${word}",
-  "phonetic": "[替换为假名读音（如果都是假名则不用）和音调（比如 [0]），如果是汉字还要包含罗马音]",
-  "level": "[替换为实际难度等级：N5/N4/N3/N2/N1]",
+  "phonetic": "[假名读音和音调，格式：ひらがな [音调数字]，不要包含罗马音]",
+  "level": "[N5/N4/N3/N2/N1]",
   "definitions": [
     {
-      "pos": "[替换为实际词性：名词/动词/形容词/形容动词/副词/助词/接续词]",
-      "meaning": "[替换为实际中文释义1]",
+      "pos": "[词性]",
+      "meaning": "[中文释义1]",
       "example": {
-        "sentence": "[替换为该释义对应的实际日语例句]",
-        "translation": "[替换为该例句的实际中文翻译]"
+        "sentence": "[日语例句]",
+        "translation": "[中文翻译]"
       }
     },
     {
-      "pos": "[替换为实际词性]",
-      "meaning": "[替换为实际中文释义2]",
+      "pos": "[词性]",
+      "meaning": "[中文释义2]",
       "example": {
-        "sentence": "[替换为该释义对应的实际日语例句]",
-        "translation": "[替换为该例句的实际中文翻译]"
+        "sentence": "[日语例句]",
+        "translation": "[中文翻译]"
       }
     }
   ],
-  "etymology": "[替换为词源或构词解释（汉字构成、音读/训读、外来语来源等）]",
-  "tips": "[替换为学习提示和记忆技巧，可以包含假名记忆、汉字联想、语法注意事项等]"
+  "conjugation": "[如果是动词，提供HTML格式的动词变形表，包含：ます形、て形、た形、ない形、辞书形、意志形、命令形、条件形等]",
+  "inflection": "[如果是形容词，提供HTML格式的形容词变形表，包含：基本形、过去形、否定形、过去否定形等]",
+  "etymology": "[词源解释]",
+  "tips": "[学习提示]"
 }
 
 关键要求：
-1. 必须替换所有方括号占位符为真实内容
-2. 不要在最终输出中留下任何[占位符]文本
-3. 确保JSON格式正确且可解析
-4. definitions 必须至少包含2个不同词性或含义
-5. 每个 definition 必须包含一个对应的 example（例句要体现该释义的用法）
-6. 所有解释和翻译必须使用中文
-7. 只返回JSON对象，不要添加任何其他文本或markdown标记
-8. 不要使用代码块标记（\`\`\`json）
-9. phonetic 必须包含假名读音，汉字词要标注音读/训读
-10. 如果是动词，说明动词类型（五段/一段/カ变/サ变）
-11. 如果是形容词，说明类型（い形容词/な形容词）`;
+1. phonetic格式：只包含假名和音调数字，例如"たいせつ [0]"，不要包含罗马音和括号
+2. 如果是动词，必须提供conjugation字段，使用HTML表格格式
+3. 如果是形容词，必须提供inflection字段，使用HTML表格格式
+4. 名词、副词等不需要conjugation或inflection字段
+5. definitions至少2个
+6. 所有解释用中文
+7. 只返回JSON，不要markdown标记`;
 }
 
 function japaneseRecommendationPrompt(knownWords, stats, count) {

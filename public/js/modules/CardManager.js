@@ -67,18 +67,25 @@ export class CardManager {
     cardEl.className = 'word-card';
     cardEl.dataset.cardId = card.id;
     
-    // 添加语言特定类 - 使用卡片的language属性或当前语言
     const cardLanguage = card.language || this.currentLanguage;
     if (cardLanguage) {
       cardEl.classList.add(`lang-${cardLanguage}`);
     }
     
-    // 如果是展开的卡片,添加expanded类
-    if (this.expandedCardId === card.id) {
-      cardEl.classList.add('expanded');
+    // 处理发音 - 日语只保留假名和音调
+    let phoneticDisplay = card.phonetic || '';
+    if (cardLanguage === 'japanese' && phoneticDisplay) {
+      phoneticDisplay = phoneticDisplay.replace(/\/.*?\//g, '').trim();
     }
     
-    // 构建释义HTML（包含每个释义的例句）- 支持Markdown渲染
+    // 生成预览内容 - 只显示第一个释义
+    let previewText = '';
+    if (card.definitions && card.definitions.length > 0) {
+      const firstDef = card.definitions[0];
+      previewText = `<span class="pill-badge pill-pos" style="font-size: 0.7rem; padding: 0.25rem 0.6rem; margin-right: 0.5rem;">${firstDef.pos || ''}</span>${firstDef.meaning}`;
+    }
+    
+    // 构建释义HTML
     let definitionsHTML = '';
     if (card.definitions && card.definitions.length > 0) {
       definitionsHTML = card.definitions.map(def => {
@@ -94,7 +101,7 @@ export class CardManager {
         
         return `
           <div class="definition-item">
-            <span class="definition-pos">${MarkdownRenderer.render(def.pos)}</span>
+            <span class="pill-badge pill-pos"><i class="bi bi-tag-fill"></i>${MarkdownRenderer.render(def.pos)}</span>
             <div class="definition-meaning">${MarkdownRenderer.render(def.meaning)}</div>
             ${exampleHTML}
           </div>
@@ -102,70 +109,30 @@ export class CardManager {
       }).join('');
     }
     
-    // 构建额外例句HTML（如果有独立的examples数组）- 支持Markdown渲染
-    let examplesHTML = '';
-    if (card.examples && card.examples.length > 0) {
-      examplesHTML = card.examples.slice(0, 2).map(ex => `
-        <div class="example-item">
-          <div class="example-sentence">${MarkdownRenderer.render(ex.sentence)}</div>
-          <div class="example-translation">${MarkdownRenderer.render(ex.translation)}</div>
-        </div>
-      `).join('');
-    }
-    
     cardEl.innerHTML = `
-      <div class="card-header">
+      <div class="card-header-new">
         <h3 class="card-word">${card.word}</h3>
+        ${phoneticDisplay ? `<span class="card-phonetic-new">${phoneticDisplay}</span>` : ''}
       </div>
       
-      ${card.phonetic ? `
-        <div class="card-phonetics">
-          <span class="card-phonetic">${card.phonetic}</span>
-        </div>
-      ` : ''}
+      ${previewText ? `<div class="card-preview">${previewText}</div>` : ''}
       
       <div class="card-body">
-        ${card.level ? `<span class="card-level">${card.level}</span>` : ''}
+        <div class="card-meta">
+          ${card.level ? `<span class="pill-badge pill-level"><i class="bi bi-award-fill"></i>${card.level}</span>` : ''}
+          ${card.conjugation ? `<span class="pill-badge pill-level"><i class="bi bi-diagram-3"></i>动词</span>` : ''}
+          ${card.inflection ? `<span class="pill-badge pill-level"><i class="bi bi-diagram-2"></i>形容词</span>` : ''}
+          ${card.declension ? `<span class="pill-badge pill-level"><i class="bi bi-table"></i>变格</span>` : ''}
+          ${card.conjugation || card.inflection || card.declension ? `<button class="pill-badge pill-expand" data-expand="grammar"><i class="bi bi-arrows-angle-expand"></i>语法</button>` : ''}
+        </div>
         
-        ${definitionsHTML ? `
-          <h4 class="card-title">
-            <i class="bi bi-book"></i>
-            释义与例句
-          </h4>
-          <div class="card-definitions">
-            ${definitionsHTML}
-          </div>
-        ` : ''}
+        ${definitionsHTML ? `<div class="card-definitions">${definitionsHTML}</div>` : ''}
         
-        ${examplesHTML ? `
-          <h4 class="card-title">
-            <i class="bi bi-chat-quote"></i>
-            更多例句
-          </h4>
-          <div class="card-examples">
-            ${examplesHTML}
-          </div>
-        ` : ''}
-        
-        ${card.etymology ? `
-          <div class="card-etymology">
-            <h4 class="card-title">
-              <i class="bi bi-tree"></i>
-              词源
-            </h4>
-            <p>${MarkdownRenderer.render(card.etymology)}</p>
-          </div>
-        ` : ''}
-        
-        ${card.tips ? `
-          <div class="card-tips">
-            <h4 class="card-title">
-              <i class="bi bi-lightbulb"></i>
-              学习提示
-            </h4>
-            <p>${MarkdownRenderer.render(card.tips)}</p>
-          </div>
-        ` : ''}
+        <div class="card-actions-row">
+          ${card.examples && card.examples.length > 0 ? `<button class="pill-badge pill-action" data-modal="examples"><i class="bi bi-chat-square-text"></i>更多例句</button>` : ''}
+          ${card.etymology ? `<button class="pill-badge pill-action" data-modal="etymology"><i class="bi bi-book"></i>词源</button>` : ''}
+          ${card.tips ? `<button class="pill-badge pill-action" data-modal="tips"><i class="bi bi-lightbulb-fill"></i>学习提示</button>` : ''}
+        </div>
         
         <div class="card-actions">
           <button class="card-action-btn btn-know" data-action="know">
@@ -186,17 +153,229 @@ export class CardManager {
           </button>
         </div>
       </div>
+      
+      <!-- 模态框 -->
+      ${card.examples && card.examples.length > 0 ? `
+        <div class="card-modal" data-modal-id="examples">
+          <div class="card-modal-content">
+            <div class="card-modal-header">
+              <h4>更多例句</h4>
+              <button class="card-modal-close">&times;</button>
+            </div>
+            <div class="card-modal-body">
+              ${card.examples.map(ex => `
+                <div class="example-item">
+                  <div class="example-sentence">${MarkdownRenderer.render(ex.sentence)}</div>
+                  <div class="example-translation">${MarkdownRenderer.render(ex.translation)}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      ` : ''}
+      
+      ${card.etymology ? `
+        <div class="card-modal" data-modal-id="etymology">
+          <div class="card-modal-content">
+            <div class="card-modal-header">
+              <h4>词源</h4>
+              <button class="card-modal-close">&times;</button>
+            </div>
+            <div class="card-modal-body">
+              <p>${MarkdownRenderer.render(card.etymology)}</p>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+      
+      ${card.tips ? `
+        <div class="card-modal" data-modal-id="tips">
+          <div class="card-modal-content">
+            <div class="card-modal-header">
+              <h4>学习提示</h4>
+              <button class="card-modal-close">&times;</button>
+            </div>
+            <div class="card-modal-body">
+              <p>${MarkdownRenderer.render(card.tips)}</p>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+      
+      ${card.conjugation || card.inflection || card.declension ? `
+        <div class="card-modal" data-modal-id="grammar">
+          <div class="card-modal-content">
+            <div class="card-modal-header">
+              <h4>语法扩展</h4>
+              <button class="card-modal-close">&times;</button>
+            </div>
+            <div class="card-modal-body">
+              ${card.conjugation || ''}
+              ${card.inflection || ''}
+              ${card.declension || ''}
+            </div>
+          </div>
+        </div>
+      ` : ''}
     `;
     
+    // 直接在整个卡片上添加点击监听器实现展开/折叠
+    cardEl.addEventListener('click', (e) => {
+      // 检查是否点击了按钮或其他交互元素（检查实际点击的元素）
+      let target = e.target;
+      while (target && target !== cardEl) {
+        if (target.tagName === 'BUTTON' || target.hasAttribute('data-modal') || target.hasAttribute('data-expand')) {
+          return; // 让按钮的事件处理器处理
+        }
+        target = target.parentElement;
+      }
+      
+      // 检查是否点击了音标
+      if (e.target.classList.contains('card-phonetic-new')) {
+        return;
+      }
+      
+      // 检查是否点击了卡片主体（已展开状态）
+      // 只允许点击头部或预览区域来折叠卡片
+      if (cardEl.classList.contains('expanded')) {
+        const clickedHeader = e.target.closest('.card-header-new');
+        const clickedPreview = e.target.closest('.card-preview');
+        if (!clickedHeader && !clickedPreview) {
+          return; // 点击的不是头部或预览区域，不折叠
+        }
+      }
+      
+      // 关闭其他展开的卡片
+      document.querySelectorAll('.word-card.expanded').forEach(c => {
+        if (c !== cardEl) c.classList.remove('expanded');
+      });
+      
+      // 切换当前卡片
+      cardEl.classList.toggle('expanded');
+      
+      // 显示/隐藏背景遮罩
+      const isExpanding = cardEl.classList.contains('expanded');
+      
+      // 确保卡片展开后可以滚动
+      if (isExpanding) {
+        setTimeout(() => {
+          const cardBody = cardEl.querySelector('.card-body');
+          if (cardBody) {
+            // 添加点击事件，但不阻止按钮的点击
+            cardBody.addEventListener('click', (e) => {
+              // 检查是否点击了按钮
+              let target = e.target;
+              while (target && target !== cardBody) {
+                if (target.tagName === 'BUTTON' || target.hasAttribute('data-modal') || target.hasAttribute('data-expand')) {
+                  return; // 让按钮的事件处理器处理
+                }
+                target = target.parentElement;
+              }
+              // 只有非按钮点击才阻止冒泡
+              e.stopPropagation();
+            }, true);
+            
+            // 强制设置样式，确保可以滚动
+            cardBody.style.overflowY = 'auto';
+            cardBody.style.pointerEvents = 'auto';
+            cardBody.style.position = 'relative';
+            cardBody.style.zIndex = '1';
+          }
+        }, 100);
+      }
+      let backdrop = document.getElementById('cardBackdrop');
+      if (isExpanding) {
+        if (!backdrop) {
+          backdrop = document.createElement('div');
+          backdrop.id = 'cardBackdrop';
+          backdrop.className = 'card-backdrop';
+          document.body.appendChild(backdrop);
+          
+          backdrop.addEventListener('click', () => {
+            document.querySelectorAll('.word-card.expanded').forEach(c => {
+              c.classList.remove('expanded');
+            });
+            backdrop.classList.remove('active');
+          });
+        }
+        backdrop.classList.add('active');
+      } else {
+        if (backdrop) {
+          backdrop.classList.remove('active');
+        }
+      }
+    });
+    
+    // 添加模态框事件监听 - 将模态框移到body避免定位问题
+    const openModal = (modalId) => {
+        // 关闭所有已打开的模态框
+        document.querySelectorAll('.card-modal.active').forEach(m => {
+          m.classList.remove('active');
+          setTimeout(() => {
+            if (m.parentElement === document.body) {
+              document.body.removeChild(m);
+            }
+          }, 300);
+        });
+        
+        // 获取模态框并克隆到body
+        const modal = cardEl.querySelector(`[data-modal-id="${modalId}"]`);
+        
+        if (modal) {
+          const modalClone = modal.cloneNode(true);
+          document.body.appendChild(modalClone);
+          setTimeout(() => {
+            modalClone.classList.add('active');
+          }, 10);
+          
+          // 关闭按钮事件
+          const closeBtn = modalClone.querySelector('.card-modal-close');
+          if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              modalClone.classList.remove('active');
+              setTimeout(() => {
+                if (modalClone.parentElement === document.body) {
+                  document.body.removeChild(modalClone);
+                }
+              }, 300);
+            });
+          }
+          
+          // 点击背景关闭
+          modalClone.addEventListener('click', (e) => {
+            if (e.target === modalClone) {
+              modalClone.classList.remove('active');
+              setTimeout(() => {
+                if (modalClone.parentElement === document.body) {
+                  document.body.removeChild(modalClone);
+                }
+              }, 300);
+            }
+          });
+        }
+      };
+      
+      // 添加按钮事件监听器
+      const modalButtons = cardEl.querySelectorAll('[data-modal]');
+      const expandButtons = cardEl.querySelectorAll('[data-expand]');
+      
+      // 合并所有按钮处理
+      [...modalButtons, ...expandButtons].forEach((btn) => {
+        btn.style.pointerEvents = 'auto';
+        btn.style.position = 'relative';
+        btn.style.zIndex = '10';
+        
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          const modalId = btn.dataset.modal || btn.dataset.expand;
+          if (modalId) {
+            openModal(modalId);
+          }
+        };
+      });
+    
     return cardEl;
-  }
-  
-  toggleCardExpand(cardId) {
-    if (this.expandedCardId === cardId) {
-      this.expandedCardId = null;
-    } else {
-      this.expandedCardId = cardId;
-    }
   }
   
   async updateCardStatus(cardId, newStatus, collectionId) {
@@ -591,12 +770,14 @@ export class CardManager {
         // 合并所有集合的卡片
         const allCards = [];
         languageCollections.forEach(collection => {
-          collection.cards.forEach(card => {
+          if (collection.cards && Array.isArray(collection.cards)) {
+            collection.cards.forEach(card => {
             allCards.push({
               ...card,
               collectionId: collection.id
             });
-          });
+            });
+          }
         });
         
         // 创建一个虚拟集合用于渲染
